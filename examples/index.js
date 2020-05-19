@@ -14,7 +14,7 @@ let component = <Counter onClick={handleClick} count={count} />;
 counter.appendChild(createElement(component));
 
 function handleClick(value) {
-  count = count + value;
+  count = value;
   const update = <Counter onClick={handleClick} count={count} />;
   updateElement(counter, update, component);
   component = update;

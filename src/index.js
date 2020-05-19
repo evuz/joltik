@@ -55,9 +55,13 @@ function addEventListeners(node, props = {}) {
   }
   Object.keys(props)
     .filter(isEventProp)
-    .forEach(event =>
-      node.addEventListener(extractEventName(event), props[event])
-    );
+    .forEach(event => {
+      const eventName = extractEventName(event);
+      node.__joltikEvents = node.__joltikEvents || {};
+      node.removeEventListener(eventName, node.__joltikEvents[eventName]);
+      node.__joltikEvents[eventName] = props[event];
+      node.addEventListener(eventName, node.__joltikEvents[eventName]);
+    });
 }
 
 /**
@@ -101,7 +105,7 @@ export function createElement(node) {
 
 /**
  * Updates a DOM node.
- * @param {*} parentNode
+ * @param {HTMLElement} parentNode
  * @param {*} newNode
  * @param {*} oldNode
  * @param {*} index
@@ -140,6 +144,8 @@ export function updateElement(parentNode, newNode, oldNode, index = 0) {
         i
       );
     }
+
+    addEventListeners(parentNode.childNodes[index], newNode.props);
   }
 }
 
