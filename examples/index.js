@@ -1,5 +1,5 @@
 /** @jsx j */
-import { createElement, updateElement, j } from "../src";
+import { updateElement, j, render } from "../src";
 import { Greeting } from "./greeting";
 import { ListWithStyles } from "./list-with-styles";
 import { List1, List2 } from "./lists";
@@ -8,34 +8,28 @@ import { Counter } from "./counter";
 
 // Counter example
 const counter = document.getElementById("counter");
-let count = 0;
-let component = <Counter onClick={handleClick} count={count} />;
+let component = <Counter onClick={handleClick} />;
 
-counter.appendChild(createElement(component));
+render(component, counter);
 
 function handleClick(value) {
-  count = value;
-  const update = <Counter onClick={handleClick} count={count} />;
+  const update = <Counter onClick={handleClick} count={value} />;
   updateElement(counter, update, component);
   component = update;
 }
 
 // Static example
-const st = document.getElementById("static");
-st.appendChild(createElement(Post));
+render(Post, document.getElementById("static"));
 
 // Diffing example
 const diffing = document.getElementById("diffing");
-diffing.appendChild(createElement(List1));
-
+render(List1, diffing);
 document.getElementById("reload").addEventListener("click", () => {
   updateElement(diffing, List2, List1);
 });
 
 // Props example
-const props = document.getElementById("props");
-props.appendChild(createElement(ListWithStyles));
+render(ListWithStyles, document.getElementById("props"));
 
 // Functional component
-const functional = document.getElementById("functional");
-functional.appendChild(createElement(<Greeting name={"Dani"} />));
+render(<Greeting name={"Dani"} />, document.getElementById("functional"));

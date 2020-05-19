@@ -64,6 +64,24 @@ function addEventListeners(node, props = {}) {
     });
 }
 
+function mount(element, parent) {
+  if (!parent) {
+    return element;
+  }
+
+  return parent.appendChild(element);
+}
+
+/**
+ * Render a DOM node.
+ * @param {*} node
+ * @param {*} parent
+ */
+export function render(node, parent) {
+  const element = createElement(node);
+  return mount(element, parent);
+}
+
 /**
  * Creates a DOM node.
  * @param {*} node
@@ -77,13 +95,13 @@ export function createElement(node) {
   // Object nodes are new tags, and it needs to be considered a new element.
   // the function uses recursion to parse this object.
   if (typeof node.type === "object") {
-    return createElement(node.type);
+    return render(node.type);
   }
 
   // A functional component is parameterized. It just needs
   // to call the function with the props as the arguments.
   if (typeof node.type === "function") {
-    return createElement(node.type(node.props));
+    return render(node.type(node.props));
   }
 
   const element = document.createElement(node.type);
@@ -95,10 +113,7 @@ export function createElement(node) {
   addEventListeners(element, node.props);
 
   // Uses recursion to render its children, if any
-  node.children &&
-    node.children
-      .map(createElement)
-      .forEach(child => element.appendChild(child));
+  node.children && node.children.map(child => render(child, element));
 
   return element;
 }
