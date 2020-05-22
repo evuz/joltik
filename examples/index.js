@@ -1,5 +1,5 @@
 /** @jsx j */
-import { updateElement, j, render } from "../src";
+import { updateElement, j, render, createElement } from "../src";
 import { Greeting } from "./greeting";
 import { ListWithStyles } from "./list-with-styles";
 import { List1, List2 } from "./lists";
@@ -12,10 +12,8 @@ let component = <Counter onClick={handleClick} />;
 
 render(component, counter);
 
-function handleClick(value) {
-  const update = <Counter onClick={handleClick} count={value} />;
-  updateElement(counter, update, component);
-  component = update;
+function handleClick() {
+  counter.firstChild.replaceWith(createElement(component));
 }
 
 // Static example

@@ -1,20 +1,21 @@
 /** @jsx j */
 import { j } from "../src";
+import { useState, dispatcherBuilder } from "../src/hooks";
 
-export function Counter({ count = 0, onClick = () => {} } = {}) {
+function Component({ onClick = () => {} } = {}) {
+  const [count, setCount] = useState(2);
+
   const increment = () => {
-    onClick(count + 1);
+    setCount(count + 1);
+    onClick();
   };
 
   const decrement = () => {
     if (count <= 0) {
       return;
     }
-    onClick(count - 1);
-  };
-
-  const decrement = () => {
-    onClick(-1);
+    setCount(count - 1);
+    onClick();
   };
 
   return (
@@ -25,3 +26,5 @@ export function Counter({ count = 0, onClick = () => {} } = {}) {
     </div>
   );
 }
+
+export const Counter = dispatcherBuilder(Component);
