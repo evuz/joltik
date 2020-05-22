@@ -13,6 +13,10 @@ export function Counter({ count = 0, onClick = () => {} } = {}) {
     onClick(count - 1);
   };
 
+  const decrement = () => {
+    onClick(-1);
+  };
+
   return (
     <div>
       <h4>Count: {count.toString()}</h4>
