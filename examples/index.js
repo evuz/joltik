@@ -1,20 +1,16 @@
 /** @jsx j */
-import { updateElement, j, render, createElement } from "../src";
+import { updateElement, j, render } from "../src";
+import { enableHooks } from "../src/hooks";
 import { Greeting } from "./greeting";
 import { ListWithStyles } from "./list-with-styles";
 import { List1, List2 } from "./lists";
 import { Post } from "./post";
 import { Counter } from "./counter";
 
+enableHooks();
+
 // Counter example
-const counter = document.getElementById("counter");
-let component = <Counter onClick={handleClick} />;
-
-render(component, counter);
-
-function handleClick() {
-  counter.firstChild.replaceWith(createElement(component));
-}
+render(<Counter />, document.getElementById("counter"));
 
 // Static example
 render(Post, document.getElementById("static"));

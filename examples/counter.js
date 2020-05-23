@@ -2,12 +2,11 @@
 import { j } from "../src";
 import { useState, dispatcherBuilder } from "../src/hooks";
 
-function Component({ onClick = () => {} } = {}) {
+export function Counter() {
   const [count, setCount] = useState(2);
 
   const increment = () => {
     setCount(count + 1);
-    onClick();
   };
 
   const decrement = () => {
@@ -15,7 +14,6 @@ function Component({ onClick = () => {} } = {}) {
       return;
     }
     setCount(count - 1);
-    onClick();
   };
 
   return (
@@ -26,5 +24,3 @@ function Component({ onClick = () => {} } = {}) {
     </div>
   );
 }
-
-export const Counter = dispatcherBuilder(Component);

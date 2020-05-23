@@ -1,15 +1,20 @@
+import { Render, updateElement } from "./index";
+
 const stack = [];
 const buckets = new Map();
 
-export function dispatcherBuilder(fn) {
-  if (fn.__isDispatcher) {
+export function dispatcherBuilder(component) {
+  console.log(component);
+  const fn = component.type;
+  if (fn.__isDispatcher__) {
     return fn;
   }
 
-  const r = dispatcher;
-  r.__isDispatcher = true;
+  const d = dispatcher;
+  d.__isDispatcher__ = true;
+  d.__component__ = component;
 
-  return r;
+  return d;
 
   function dispatcher(...args) {
     stack.push(dispatcher);
@@ -33,6 +38,11 @@ export function useState(initialValue) {
 
   function setState(newVal = null) {
     bucket.hooks[indexHook] = newVal;
+    updateElement(
+      bucket.__dispatcher.__node__.parentNode,
+      bucket.__dispatcher.__component__,
+      bucket.__dispatcher.__currentElement__
+    );
   }
   return [bucket.hooks[bucket.currentHook++], setState];
 }
@@ -57,11 +67,28 @@ export function useEffect(callback, depArray) {
 
 function getCurrentBucket() {
   const el = stack[stack.length - 1];
+
+  if (!el) {
+    throw Error("You need to create a dispatcher before using hooks");
+  }
+
   if (!buckets.has(el)) {
     buckets.set(el, {
       currentHook: 0,
-      hooks: []
+      hooks: [],
+      __dispatcher: el
     });
   }
   return buckets.get(el);
+}
+
+export function enableHooks() {
+  Render.functionalComponent = renderFunctionalComponent;
+}
+
+function renderFunctionalComponent(component) {
+  component.type = dispatcherBuilder(component);
+  const element = component.type(component.props);
+  component.type.__currentElement__ = element;
+  return element;
 }

@@ -101,7 +101,9 @@ export function createElement(node) {
   // A functional component is parameterized. It just needs
   // to call the function with the props as the arguments.
   if (typeof node.type === "function") {
-    return render(node.type(node.props));
+    const element = render(Render.functionalComponent(node));
+    node.type.__node__ = element;
+    return element;
   }
 
   const element = document.createElement(node.type);
@@ -127,11 +129,11 @@ export function createElement(node) {
  */
 export function updateElement(parentNode, newNode, oldNode, index = 0) {
   if (newNode && typeof newNode.type === "function") {
-    newNode = newNode.type(newNode.props);
+    newNode = Render.functionalComponent(newNode);
   }
 
   if (oldNode && typeof oldNode.type === "function") {
-    oldNode = oldNode.type(oldNode.props);
+    oldNode = Render.functionalComponent(oldNode);
   }
 
   // If the old node doesn't exist, it adds the new one to the parent.
@@ -177,3 +179,9 @@ function nodesAreDifferent(first, second) {
     first.type !== second.type
   );
 }
+
+export const Render = {
+  functionalComponent(node) {
+    return node.type(node.props);
+  }
+};
