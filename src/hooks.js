@@ -1,4 +1,4 @@
-import { Render, updateElement } from "./index";
+import { Render, updateElement } from "./render";
 
 const stack = [];
 const buckets = new Map();
