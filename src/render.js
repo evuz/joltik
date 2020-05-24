@@ -163,6 +163,14 @@ export function updateElement(parentNode, newNode, oldNode, index = 0) {
     }
 
     addEventListeners(parentNode.childNodes[index], newNode.props);
+
+    if (newNode.props["className"] !== oldNode.props["className"]) {
+      setProp(
+        parentNode.childNodes[index],
+        "className",
+        newNode.props["className"]
+      );
+    }
   }
 }
 
