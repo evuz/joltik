@@ -4,7 +4,6 @@ const stack = [];
 const buckets = new Map();
 
 export function dispatcherBuilder(component) {
-  console.log(component);
   const fn = component.type;
   if (fn.__isDispatcher__) {
     return fn;
@@ -87,8 +86,11 @@ export function enableHooks() {
 }
 
 function renderFunctionalComponent(component) {
+  const props = Object.assign({}, component.props, {
+    children: component.children
+  });
   component.type = dispatcherBuilder(component);
-  const element = component.type(component.props);
+  const element = component.type(props);
   component.type.__currentElement__ = element;
   return element;
 }

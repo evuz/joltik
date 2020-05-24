@@ -190,6 +190,7 @@ function nodesAreDifferent(first, second) {
 
 export const Render = {
   functionalComponent(node) {
-    return node.type(node.props);
+    const props = Object.assign({}, node.props, { children: node.children });
+    return node.type(props);
   }
 };
