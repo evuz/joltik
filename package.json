@@ -1,6 +1,6 @@
 {
   "name": "@evuz/joltik",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A micro VDOM library for learning purposes",
   "main": "lib/index.js",
   "umd:main": "lib/index.umd.js",
