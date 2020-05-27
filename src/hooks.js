@@ -57,7 +57,10 @@ export function useEffect(callback, depArray) {
   }
 
   if (hasNoDeps || hasChangedDeps) {
-    callback();
+    if (typeof bucket.effects[bucket.currentHook] === "function") {
+      bucket.effects[bucket.currentHook]();
+    }
+    bucket.effects[bucket.currentHook] = callback();
     bucket.hooks[bucket.currentHook] = depArray;
   }
 
@@ -75,6 +78,7 @@ function getCurrentBucket() {
     buckets.set(el, {
       currentHook: 0,
       hooks: [],
+      effects: {},
       __dispatcher: el
     });
   }
